@@ -21,7 +21,11 @@ class BlogHandler(webapp2.RequestHandler):
         """
 
         # TODO - filter the query so that only posts by the given user
-        return None
+
+        query = Post.all().filter("author", user).order("-created")
+
+
+        return query.fetch(limit=limit, offset=offset)
 
     def get_user_by_name(self, username):
         """ Get a user object from the db, based on their username """
@@ -92,6 +96,10 @@ class BlogIndexHandler(BlogHandler):
             posts = self.get_posts_by_user(user, self.page_size, offset)
         else:
             posts = self.get_posts(self.page_size, offset)
+
+
+
+
 
         # determine next/prev page numbers for navigation links
         if page > 1:
